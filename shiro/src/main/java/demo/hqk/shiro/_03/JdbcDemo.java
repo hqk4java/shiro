@@ -24,10 +24,19 @@ public class JdbcDemo{
 		SecurityUtils.setSecurityManager(securityManager);
 		// 3、得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）
 		Subject subject = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken("hqk", "123");
+		String username = "hqk";
+		String password = "123";
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		try {
 			subject.login(token);
 			System.out.println("身份验证成功!!!");
+			boolean hasRole = subject.hasRole("update");
+			boolean permitted = subject.isPermitted("delete");
+			System.out.println(hasRole);
+			System.out.println(permitted);
+			if(!hasRole || !permitted){
+				System.out.println("权限校验失败！！！");
+			}
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			System.out.println("身份验证失败!!!!" + e.toString());
